@@ -1,5 +1,7 @@
 package com.artem.hometask;
 
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -9,8 +11,8 @@ import android.widget.TextView;
  */
 public class SimpleViewHolder extends RecyclerView.ViewHolder {
     private TextView mTitle;
-    private View rootView;
-    public SimpleViewHolder(View itemView) {
+    private CardView rootView;
+    public SimpleViewHolder(CardView itemView) {
         super(itemView);
         rootView = itemView;
         mTitle = (TextView)itemView.findViewById(R.id.title);
@@ -21,6 +23,6 @@ public class SimpleViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setColor(int id) {
-        rootView.setBackgroundResource(id);
+        rootView.setCardBackgroundColor(ContextCompat.getColor(rootView.getContext(), id));
     }
 }
