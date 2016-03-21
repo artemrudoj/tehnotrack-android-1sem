@@ -20,7 +20,7 @@ public class SecondActivity extends ToolbarActivity {
     void setUpRecyclerView() {
         RecyclerView mRecyclerView = (RecyclerView)findViewById(R.id.recyclerview);
 
-        mRecyclerView.setAdapter(new SimpleRecyclerViewAdapter(getLayoutInflater()));
+        mRecyclerView.setAdapter(new SimpleRecyclerViewAdapter(getLayoutInflater(), getApplicationContext()));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mRecyclerView.setHasFixedSize(true);
