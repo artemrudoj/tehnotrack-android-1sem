@@ -9,7 +9,6 @@ import com.artem.hometask.R;
 
 public class ToolbarActivity extends BaseActivity {
 
-    private Toolbar mActionBarToolbar;
     TextView titleToolbar;
 
 
@@ -19,7 +18,7 @@ public class ToolbarActivity extends BaseActivity {
     }
 
     public void setToolbar(String title) {
-        mActionBarToolbar =
+        Toolbar mActionBarToolbar =
                 (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_actionbar);
         mActionBarToolbar.setTitle("");
         titleToolbar = (TextView) mActionBarToolbar.findViewById(R.id.title_tv);
@@ -34,6 +33,7 @@ public class ToolbarActivity extends BaseActivity {
     }
 
     public void changeTitle(String title) {
+        if (titleToolbar != null)
         titleToolbar.setText(title);
     }
 
