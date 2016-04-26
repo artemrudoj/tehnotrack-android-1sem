@@ -45,8 +45,8 @@ public class TechnologiesListFragment extends BaseFragment {
                     new SimpleRecyclerViewAdapter(activity.getLayoutInflater(), activity, list,
                             new SimpleRecyclerViewAdapter.IClickListener() {
                                 @Override
-                                public void onClick(Technology technology) {
-                                    Fragment fragment = new TechnologyViewPagerFragment();
+                                public void onClick(Technology technology, int position) {
+                                    Fragment fragment = TechnologyViewPagerFragment.newInstance(position + 1);
                                     //// TODO: 26.04.16
                                     TechnologiesListFragment.this.getActivity().getSupportFragmentManager().beginTransaction().
                                             replace(R.id.tech_container_fl,fragment).addToBackStack(null).commit();

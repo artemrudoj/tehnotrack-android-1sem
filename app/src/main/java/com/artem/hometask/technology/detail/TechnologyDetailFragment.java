@@ -17,8 +17,8 @@ import com.artem.hometask.model.Technology;
 
 
 public class TechnologyDetailFragment extends BaseFragment {
-    public final String BASE_URL = "http://mobevo.ext.terrhq.ru/";
-    final private static String TECHNOLODY_ID = "TechnologyDetailFragment:TECHNOLODY_ID";
+    static public final String BASE_URL = "http://mobevo.ext.terrhq.ru/";
+    final public static String TECHNOLODY_ID = "TechnologyDetailFragment:TECHNOLODY_ID";
     Technology item;
     public TechnologyDetailFragment() {
         // Required empty public constructor
@@ -40,7 +40,7 @@ public class TechnologyDetailFragment extends BaseFragment {
         if (index == -1 )
             throw new IllegalArgumentException("can not found tech index");
         item = TechnologiesManager.getInstance().getByIndex(index);
-        if(item == null )
+        if(item == null)
             throw new IllegalArgumentException("can not found tech by index");
     }
 
@@ -58,7 +58,7 @@ public class TechnologyDetailFragment extends BaseFragment {
         ((TextView)contentView.findViewById(R.id.title_tv)).setText(item.getTitle());
         ((TextView)contentView.findViewById(R.id.info_tv)).setText(item.getInfo());
         ImageDownloadManager.getInstance().setImageViewByUrl(getActivity(), BASE_URL + item.getPicture(),
-                ((ImageView)contentView.findViewById(R.id.picture_iv)));
+                ((ImageView)contentView.findViewById(R.id.picture_iv)), null);
 
     }
 

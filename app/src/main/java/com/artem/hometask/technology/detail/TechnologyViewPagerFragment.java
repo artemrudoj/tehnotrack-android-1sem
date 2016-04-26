@@ -16,13 +16,13 @@ import android.view.ViewGroup;
 import com.artem.hometask.R;
 import com.artem.hometask.base.BaseFragment;
 import com.artem.hometask.model.TechnologiesManager;
+import com.artem.hometask.model.Technology;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class TechnologyViewPagerFragment extends BaseFragment {
 
-    private static final int NUM_PAGES = 5;
 
     private ViewPager mPager;
 
@@ -30,12 +30,19 @@ public class TechnologyViewPagerFragment extends BaseFragment {
      * The pager adapter, which provides the pages to the view pager widget.
      */
     private PagerAdapter mPagerAdapter;
-    private View upViewPager;
 
     public TechnologyViewPagerFragment() {
         // Required empty public constructor
     }
 
+    public static TechnologyViewPagerFragment newInstance(int technologyPosition) {
+        TechnologyViewPagerFragment technologyDetailFragment = new TechnologyViewPagerFragment();
+        Bundle args = new Bundle();
+        args.putInt(TechnologyDetailFragment.TECHNOLODY_ID, technologyPosition);
+        technologyDetailFragment.setArguments(args);
+        return technologyDetailFragment;
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,6 +57,7 @@ public class TechnologyViewPagerFragment extends BaseFragment {
         mPager = (ViewPager) contentView.findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getChildFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+        mPager.setCurrentItem(getArguments().getInt(TechnologyDetailFragment.TECHNOLODY_ID));
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {

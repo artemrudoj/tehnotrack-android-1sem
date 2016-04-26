@@ -4,16 +4,20 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.util.LruCache;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.artem.hometask.technology.detail.TechnologyDetailFragment;
 import com.artem.hometask.utils.Utils;
 
 import java.io.File;
@@ -29,7 +33,6 @@ import java.net.URL;
  * Created by artem on 26.04.16.
  */
 public class ImageDownloadManager {
-    final static String BASE_URL = "";
     private static ImageDownloadManager mInstance = null;
     private LruCache<String, Bitmap> memoryCache;
 
@@ -60,15 +63,23 @@ public class ImageDownloadManager {
         return memoryCache.get(key);
     }
 
-    public void setImageViewByUrl(Context context, String name, ImageView iv) {
+    public void setImageViewByUrl(Context context, String name, ImageView iv, Integer width) {
+        iv.setTag(name);
+        int _imageWidth;
+        if(width == null) {
+            _imageWidth = Utils.getDisplayWidth(context);
+        } else {
+            _imageWidth = width;
+        }
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) iv.getLayoutParams();
+        params.width = _imageWidth;
+        params.height = _imageWidth;
+        iv.setLayoutParams(params);
         final Bitmap bm = getBitmapFromMemCache(name);
         if (null != bm) {
-            cancelDownload(name, iv);
             iv.setImageBitmap(bm);
         } else {
-            LoadImageTask lt = new LoadImageTask(context, iv, name, null);
-            DownloadDrawable dd = new DownloadDrawable(lt);
-            iv.setImageDrawable(dd);
+            LoadImageTask lt = new LoadImageTask(context, iv, name, _imageWidth);
             lt.execute();
         }
     }
@@ -94,22 +105,8 @@ public class ImageDownloadManager {
             _weakIv = new WeakReference<>(iv);
             _context = new WeakReference<>(context);
             _name = name;
-            if(width != null) {
-                _imageWidth = width;
-            } else {
-                _imageWidth = updateImageSize(context.getResources().getDisplayMetrics());
-            }
-        }
+            _imageWidth = width;
 
-        private  int updateImageSize(DisplayMetrics dm) {
-            int h = dm.heightPixels;
-            int w = dm.widthPixels;
-            if (w > h) {
-                int tmp = w;
-                w = h;
-                h = tmp;
-            }
-            return (int)(Math.min(h * 0.9f, w * 0.9f) + 0.5f);
         }
 
 
@@ -119,9 +116,7 @@ public class ImageDownloadManager {
                 BitmapFactory.Options opt = new BitmapFactory.Options();
                 opt.inJustDecodeBounds = true;
                 BitmapFactory.decodeStream(is, null, opt);
-
                 int sc = calculateInSampleSize(opt, _imageWidth, _imageWidth);
-                //is.reset();
                 opt.inSampleSize = sc;
                 opt.inJustDecodeBounds = false;
                 Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file), null, opt);
@@ -142,7 +137,6 @@ public class ImageDownloadManager {
                 Bitmap bitmap;
                 File file;
                 if (context != null) {
-                    //InputStream is = context.getAssets().open(_name);
                     file = new File(context.getCacheDir(), _name.replace("/", ""));
                     bitmap = decodeFile(file);
                     if (null == bitmap ) {
@@ -163,66 +157,16 @@ public class ImageDownloadManager {
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            if (isCancelled())
-                bitmap = null;
-
             Bitmap bm = ImageDownloadManager.this.getBitmapFromMemCache(_name);
             if (bm == null && bitmap != null) {
                 ImageDownloadManager.this.addBitmapToMemoryCache(_name, bitmap);
                 bm = bitmap;
             }
             ImageView iv = _weakIv.get();
-            if (iv != null && this == getBitmapDownloaderTask(iv)) {
-
+            if (iv != null && iv.getTag() != null && _name.equals(iv.getTag())) {
                 iv.setImageBitmap(bm);
-                // Now change ImageView's dimensions to match the scaled image
-                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) iv.getLayoutParams();
-                params.width = _imageWidth;
-                params.height = _imageWidth;
-                //params.height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                //params.width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                params.gravity = Gravity.CENTER_HORIZONTAL;
-                iv.setLayoutParams(params);
-
             }
         }
-    }
-
-    private static class DownloadDrawable extends ColorDrawable {
-        private final WeakReference<LoadImageTask> _loadTaskWeak;
-
-        private DownloadDrawable(LoadImageTask loadTask) {
-            super(Color.YELLOW);
-            _loadTaskWeak = new WeakReference<>(loadTask);
-        }
-
-        public LoadImageTask getTask() {
-            return _loadTaskWeak.get();
-        }
-    }
-
-
-
-
-    private static void cancelDownload(String key, ImageView imageView) {
-        LoadImageTask task = getBitmapDownloaderTask(imageView);
-        if (null != task) {
-            String bitKey = task._name;
-            if ((bitKey == null) || (!bitKey.equals(key))) {
-                task.cancel(true);
-            }
-        }
-    }
-
-    private static LoadImageTask getBitmapDownloaderTask(ImageView imageView) {
-        if (imageView != null) {
-            Drawable drawable = imageView.getDrawable();
-            if (drawable instanceof DownloadDrawable) {
-                DownloadDrawable dd = (DownloadDrawable)drawable;
-                return dd.getTask();
-            }
-        }
-        return null;
     }
 
     public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
