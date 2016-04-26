@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.artem.hometask.R;
 import com.artem.hometask.base.BaseFragment;
-import com.artem.hometask.model.DataManager;
+import com.artem.hometask.model.TechnologiesManager;
 import com.artem.hometask.model.Technology;
 import com.artem.hometask.technology.detail.TechnologyViewPagerFragment;
 
@@ -39,7 +39,7 @@ public class TechnologiesListFragment extends BaseFragment {
     void setUpRecyclerView(View containerView) {
         Activity activity = getActivity();
         if(activity != null) {
-            List<Technology> list = DataManager.getInstance().getTechnologies();
+            List<Technology> list = TechnologiesManager.getInstance().getTechnologies();
             RecyclerView mRecyclerView = (RecyclerView)containerView.findViewById(R.id.recyclerview);
             SimpleRecyclerViewAdapter simpleViewHolderAdapter =
                     new SimpleRecyclerViewAdapter(activity.getLayoutInflater(), activity, list,
@@ -47,9 +47,9 @@ public class TechnologiesListFragment extends BaseFragment {
                                 @Override
                                 public void onClick(Technology technology) {
                                     Fragment fragment = new TechnologyViewPagerFragment();
-                                    //// TODO: 26.04.16  
+                                    //// TODO: 26.04.16
                                     TechnologiesListFragment.this.getActivity().getSupportFragmentManager().beginTransaction().
-                                            replace(R.id.tech_container_fl,fragment).commit();
+                                            replace(R.id.tech_container_fl,fragment).addToBackStack(null).commit();
                                 }
                             });
             mRecyclerView.setAdapter(simpleViewHolderAdapter);

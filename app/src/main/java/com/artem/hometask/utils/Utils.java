@@ -3,11 +3,12 @@ package com.artem.hometask.utils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Created by artem on 22.04.16.
  */
-public class StringUtils {
+public class Utils {
     public static String readInputStream(InputStream is) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         int read;
@@ -19,5 +20,22 @@ public class StringUtils {
 
         outputStream.flush();
         return outputStream.toString("utf-8");
+    }
+
+    public static void CopyStream(InputStream is, OutputStream os)
+    {
+        final int buffer_size=1024;
+        try
+        {
+            byte[] bytes=new byte[buffer_size];
+            for(;;)
+            {
+                int count=is.read(bytes, 0, buffer_size);
+                if(count==-1)
+                    break;
+                os.write(bytes, 0, count);
+            }
+        }
+        catch(Exception ex){}
     }
 }

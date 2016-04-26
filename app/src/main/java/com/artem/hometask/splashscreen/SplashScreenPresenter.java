@@ -5,10 +5,10 @@ import android.support.annotation.NonNull;
 
 
 import com.artem.hometask.base.BasePresenter;
-import com.artem.hometask.model.DataManager;
+import com.artem.hometask.model.TechnologiesManager;
 import com.artem.hometask.model.Technology;
 import com.artem.hometask.utils.JsonParser;
-import com.artem.hometask.utils.StringUtils;
+import com.artem.hometask.utils.Utils;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -24,6 +24,7 @@ import java.util.List;
  */
 public class SplashScreenPresenter extends BasePresenter<List<Technology>, SplashScreenView> {
     private boolean isLoadingData = false;
+
     private final String DOWNLOADING_URL = "http://mobevo.ext.terrhq.ru/shr/j/ru/technology.js";
 
     @Override
@@ -53,7 +54,7 @@ public class SplashScreenPresenter extends BasePresenter<List<Technology>, Splas
                         connection = (HttpURLConnection) url.openConnection();
                         connection.setRequestMethod("GET");
                         InputStream is = new BufferedInputStream(connection.getInputStream());
-                        String json = StringUtils.readInputStream(is);
+                        String json = Utils.readInputStream(is);
                         List<Technology> techs = JsonParser.parseListOfTechnologiesFromJson(json);
                         is.close();
                         return techs;
@@ -75,7 +76,7 @@ public class SplashScreenPresenter extends BasePresenter<List<Technology>, Splas
             if(!isCancelled()) {
                 if (techs != null)
                     setModel(techs);
-                    DataManager.getInstance().setTechnologies(techs);
+                    TechnologiesManager.getInstance().setTechnologies(techs);
                 if(view() != null)
                     view().goToListActivity();
             }

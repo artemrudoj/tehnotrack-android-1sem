@@ -41,4 +41,6 @@ public class ToolbarActivity extends BaseActivity {
     public void changeTitle(int title) {
         changeTitle(getString(title));
     }
+
+
 }

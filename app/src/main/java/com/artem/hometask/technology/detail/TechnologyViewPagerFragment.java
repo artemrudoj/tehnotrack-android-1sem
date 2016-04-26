@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.artem.hometask.R;
 import com.artem.hometask.base.BaseFragment;
+import com.artem.hometask.model.TechnologiesManager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,7 +64,7 @@ public class TechnologyViewPagerFragment extends BaseFragment {
 
         @Override
         public int getCount() {
-            return NUM_PAGES;
+            return TechnologiesManager.getInstance().itemCount();
         }
     }
 }
