@@ -21,16 +21,16 @@ public class SimpleViewHolder extends RecyclerView.ViewHolder {
     private CardView rootView;
     private Technology item;
     private int position;
-    public SimpleViewHolder(CardView itemView, final int position, final SimpleRecyclerViewAdapter.IClickListener onClickListener) {
+
+    public SimpleViewHolder(CardView itemView, final SimpleRecyclerViewAdapter.IClickListener onClickListener) {
         super(itemView);
-        this.position = position;
         rootView = itemView;
         mImageView = (ImageView) itemView.findViewById(R.id.image);
         mTitle = (TextView)itemView.findViewById(R.id.title);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickListener.onClick(item, position);
+                onClickListener.onClick(position);
             }
         });
     }
@@ -55,4 +55,9 @@ public class SimpleViewHolder extends RecyclerView.ViewHolder {
     public void setItem(Technology item) {
         this.item = item;
     }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
 }
