@@ -64,6 +64,9 @@ public class ImageDownloadManager {
     }
 
     public void setImageViewByUrl(Context context, String name, ImageView iv, Integer width) {
+        if(iv.getTag() != null) {
+            iv.setImageBitmap(null);
+        }
         iv.setTag(name);
         int _imageWidth;
         if(width == null) {
