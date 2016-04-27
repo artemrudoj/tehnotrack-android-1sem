@@ -1,7 +1,9 @@
 package com.artem.hometask.utils;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Point;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -14,6 +16,14 @@ import java.io.OutputStream;
  * Created by artem on 22.04.16.
  */
 public class Utils {
+
+    public static float convertDpToPixel(float dp, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float px = dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return px;
+    }
+
     public static String readInputStream(InputStream is) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         int read;

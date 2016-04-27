@@ -11,6 +11,7 @@ import com.artem.hometask.R;
 import com.artem.hometask.imageloader.ImageDownloadManager;
 import com.artem.hometask.model.Technology;
 import com.artem.hometask.technology.detail.TechnologyDetailFragment;
+import com.artem.hometask.utils.Utils;
 
 /**
  * Created by artem on 17.03.16.
@@ -21,6 +22,7 @@ public class SimpleViewHolder extends RecyclerView.ViewHolder {
     private CardView rootView;
     private Technology item;
     private int position;
+    private final float IMAGE_SIZE_DP = 64;
 
     public SimpleViewHolder(CardView itemView, final SimpleRecyclerViewAdapter.IClickListener onClickListener) {
         super(itemView);
@@ -46,9 +48,8 @@ public class SimpleViewHolder extends RecyclerView.ViewHolder {
     public void updateView() {
         if(item != null) {
             setTitle(item.getTitle());
-            //// TODO: 27.04.16 correct size  and context
             ImageDownloadManager.getInstance().setImageViewByUrl(rootView.getContext(), TechnologyDetailFragment.BASE_URL + item.getPicture(),
-                    mImageView, 120);
+                    mImageView, (int) Utils.convertDpToPixel(IMAGE_SIZE_DP, rootView.getContext()));
         }
     }
 

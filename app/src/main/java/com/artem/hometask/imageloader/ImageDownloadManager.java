@@ -17,7 +17,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.artem.hometask.technology.detail.TechnologyDetailFragment;
+
 import com.artem.hometask.utils.Utils;
 
 import java.io.File;
@@ -75,9 +75,11 @@ public class ImageDownloadManager {
             _imageWidth = width;
         }
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) iv.getLayoutParams();
-        params.width = _imageWidth;
-        params.height = _imageWidth;
-        iv.setLayoutParams(params);
+        if(params.width != _imageWidth) {
+            params.width = _imageWidth;
+            params.height = _imageWidth;
+            iv.setLayoutParams(params);
+        }
         final Bitmap bm = getBitmapFromMemCache(name);
         if (null != bm) {
             iv.setImageBitmap(bm);
