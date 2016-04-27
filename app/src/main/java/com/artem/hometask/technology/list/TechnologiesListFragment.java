@@ -47,7 +47,6 @@ public class TechnologiesListFragment extends BaseFragment {
                                 @Override
                                 public void onClick(int position) {
                                     Fragment fragment = TechnologyViewPagerFragment.newInstance(position);
-                                    //// TODO: 26.04.16
                                     TechnologiesListFragment.this.getActivity().getSupportFragmentManager().beginTransaction().
                                             replace(R.id.tech_container_fl,fragment).addToBackStack(null).commit();
                                 }
